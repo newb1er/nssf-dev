@@ -53,7 +53,6 @@ func (ns *NrfService) SendRegisterNFInstance(ctx context.Context, nssfCtx *nssf_
 	apiClient := ns.nrfNfMgmtClient
 
 	var res *NFManagement.RegisterNFInstanceResponse
-	var nf models.NfProfile
 	finish := false
 	for !finish {
 		select {
@@ -80,8 +79,9 @@ func (ns *NrfService) SendRegisterNFInstance(ctx context.Context, nssfCtx *nssf_
 			retrieveNfInstanceId = resourceUri[strings.LastIndex(resourceUri, "/")+1:]
 
 			oauth2 := false
-			if nf.CustomInfo != nil {
-				v, ok := nf.CustomInfo["oauth2"].(bool)
+			
+			if res.NrfNfManagementNfProfile.CustomInfo != nil {
+				v, ok := res.NrfNfManagementNfProfile.CustomInfo["oauth2"].(bool)
 				if ok {
 					oauth2 = v
 					logger.MainLog.Infoln("OAuth2 setting receive from NRF:", oauth2)
